@@ -18,6 +18,8 @@ export interface AuthResponse {
     message: string;
 }
 
+export interface RegisterResponse extends AuthResponse {}
+
 export interface AuthState {
     user: User | null;
     token: string | null;

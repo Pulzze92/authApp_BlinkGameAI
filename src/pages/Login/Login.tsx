@@ -20,6 +20,7 @@ export const Login: React.FC = () => {
             }
         } catch (e) {
             message.error('Login error occurred');
+            setError('Invalid Credentials');
         }
     }
 
@@ -33,7 +34,7 @@ export const Login: React.FC = () => {
                     <Input placeholder="Username" />
                 </Form.Item>
                 <Form.Item name="Password" rules={[{required: true, message: 'Enter your password'}]}>
-                    <Input placeholder="Password" />
+                    <Input.Password placeholder="Password" />
                 </Form.Item>
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 <Button type="primary" htmlType="submit">Login</Button>
