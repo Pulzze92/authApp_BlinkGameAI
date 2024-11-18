@@ -14,10 +14,15 @@ export const Home: React.FC = () => {
     const { user, isLoading, error } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            navigate('/login');
+            return;
+        }
+
         dispatch(fetchUserProfile())
             .unwrap()
             .catch((err) => {
-                message.error('Error profile loading');
+                message.error('Ошибка загрузки профиля');
                 if (err.response?.status === 401) {
                     dispatch(logout());
                     navigate('/login');
@@ -38,15 +43,24 @@ export const Home: React.FC = () => {
         );
     }
 
+    if (!user) {
+        return (
+            <Card style={{ maxWidth: '600px', margin: '40px auto' }}>
+                <Spin size="large" style={{ margin: '20px auto', display: 'block' }} />
+                <Title level={3} type="danger">Пользователь не найден</Title>
+            </Card>
+        );
+    }
+
     if (error) {
         return (
             <div style={{
                 textAlign: 'center',
                 marginTop: '100px'
             }}>
-                <Title level={3} type="danger">Error profile loading</Title>
+                <Title level={3} type="danger">Ошибка загрузки профиля</Title>
                 <Button onClick={() => dispatch(fetchUserProfile())}>
-                    Retry
+                    Повторить попытку
                 </Button>
             </div>
         );
@@ -67,7 +81,7 @@ export const Home: React.FC = () => {
                         onClick={handleLogout}
                         danger
                     >
-                        Log out
+                        Выйти из профиля
                     </Button>
                 ]}
             >
@@ -80,11 +94,11 @@ export const Home: React.FC = () => {
                     <Avatar
                         size={128}
                         icon={<UserOutlined />}
-                        src={user?.avatar}
+                        src={user?.data.avatar}
                     />
 
                     <Title level={2} style={{ margin: 0 }}>
-                        {user?.username}
+                        {user?.data.username}
                     </Title>
 
                     <Paragraph style={{
@@ -92,7 +106,7 @@ export const Home: React.FC = () => {
                         fontSize: '16px',
                         maxWidth: '400px'
                     }}>
-                        {user?.about || 'There is no info'}
+                        {user?.data.about || 'Информация отсутствует'}
                     </Paragraph>
                 </div>
             </Card>

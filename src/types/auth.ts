@@ -6,19 +6,23 @@ export interface LoginRequest {
 export interface RegisterRequest extends LoginRequest {}
 
 export interface User {
-    id: number;
-    username: string;
-    avatar: string;
-    about: string;
+    data: {
+        id: number;
+        username: string;
+        avatar: string;
+        about: string | null;
+    }
 }
 
 export interface AuthResponse {
-    token: string;
     error: string | null;
-    message: string;
+    token: string | null;
 }
 
-export interface RegisterResponse extends AuthResponse {}
+export interface RegisterResponse {
+    error?: string;
+    message?: string;
+}
 
 export interface AuthState {
     user: User | null;

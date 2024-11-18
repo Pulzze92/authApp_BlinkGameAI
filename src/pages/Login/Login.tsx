@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { login } from "../../store/slices/authSlice";
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from "../../store";
-import {AuthResponse} from "../../types/auth";
 
 type FieldType = {
-    Username?: string;
-    Password?: string;
-    Remember?: string;
+    username: string;
+    password: string;
+    remember?: boolean;
 };
 
 export const Login: React.FC = () => {
@@ -17,38 +16,40 @@ export const Login: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
 
-    const handleLogin = async (values: { username: string; password: string }) => {
+    const handleLogin = async (values: FieldType) => {
         try {
-            const result: AuthResponse = await dispatch(login(values)).unwrap();
-            if (result.message === 'Successfully login') {
-                message.success('Successfully login');
-                navigate('/login');
+            const { remember, ...loginData } = values;
+            const result = await dispatch(login(loginData)).unwrap();
+            if (result.token) {
+                message.success('Успешная авторизация');
+                navigate('/');
             }
-        } catch (e) {
-            message.error('Login error occurred');
-            setError('Invalid Credentials');
+        } catch (e: any) {
+            const errorMessage = e.error || 'Ошибка авторизации';
+            setError(errorMessage);
+            message.error(errorMessage);
         }
-    }
+    };
 
     return (
-        <Card title="Login" bordered={false} style={{
+        <Card title="Вход в профиль" bordered={false} style={{
             maxWidth: '400px',
             margin: '100px auto',
             padding: '0 16px'}}>
             <Form onFinish={handleLogin}>
-                <Form.Item<FieldType> name="Username" rules={[{required: true, message: 'Enter your username'}]}>
-                    <Input placeholder="Username" />
+                <Form.Item<FieldType> name="username" rules={[{required: true, message: 'Введите имя пользователя'}]}>
+                    <Input placeholder="Имя пользователя" />
                 </Form.Item>
-                <Form.Item<FieldType> name="Password" rules={[{required: true, message: 'Enter your password'}]}>
-                    <Input.Password placeholder="Password" />
+                <Form.Item<FieldType> name="password" rules={[{required: true, message: 'Введите пароль'}]}>
+                    <Input.Password placeholder="Пароль" />
                 </Form.Item>
-                <Form.Item<FieldType> name="Remember" valuePropName="checked" label={null}>
-                    <Checkbox>Remember me</Checkbox>
+                <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
+                    <Checkbox>Запомнить меня</Checkbox>
                 </Form.Item>
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 <div style={{ textAlign: 'center' }}>
-                    <Button type="primary" htmlType="submit">Login</Button>
-                    <Button type="link" onClick={() => navigate('/register')}>Register</Button>
+                    <Button type="primary" htmlType="submit">Войти</Button>
+                    <Button type="link" onClick={() => navigate('/register')}>Зарегистрироваться</Button>
                 </div>
 
             </Form>

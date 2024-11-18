@@ -6,12 +6,18 @@ import store from './store';
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Home } from "./pages/Home";
+import PrivateRoute from './components/PrivateRoute';
 
 ReactDOM.render(
     <Provider store={store}>
         <Router>
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={
+                    <PrivateRoute>
+                        <Home />
+                    </PrivateRoute>
+                }
+                />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
             </Routes>
