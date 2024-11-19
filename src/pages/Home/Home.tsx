@@ -22,7 +22,7 @@ export const Home: React.FC = () => {
         dispatch(fetchUserProfile())
             .unwrap()
             .catch((err) => {
-                message.error('Ошибка загрузки профиля');
+                message.error('Loading profile error');
                 if (err.response?.status === 401) {
                     dispatch(logout());
                     navigate('/login');
@@ -47,7 +47,7 @@ export const Home: React.FC = () => {
         return (
             <Card style={{ maxWidth: '600px', margin: '40px auto' }}>
                 <Spin size="large" style={{ margin: '20px auto', display: 'block' }} />
-                <Title level={3} type="danger">Пользователь не найден</Title>
+                <Title level={3} type="danger">User did not found</Title>
             </Card>
         );
     }
@@ -58,9 +58,9 @@ export const Home: React.FC = () => {
                 textAlign: 'center',
                 marginTop: '100px'
             }}>
-                <Title level={3} type="danger">Ошибка загрузки профиля</Title>
+                <Title level={3} type="danger">Loading profile error</Title>
                 <Button onClick={() => dispatch(fetchUserProfile())}>
-                    Повторить попытку
+                    Retry
                 </Button>
             </div>
         );
@@ -81,7 +81,7 @@ export const Home: React.FC = () => {
                         onClick={handleLogout}
                         danger
                     >
-                        Выйти из профиля
+                        Sign out
                     </Button>
                 ]}
             >
@@ -106,7 +106,7 @@ export const Home: React.FC = () => {
                         fontSize: '16px',
                         maxWidth: '400px'
                     }}>
-                        {user?.data.about || 'Информация отсутствует'}
+                        {user?.data.about || 'Information empty'}
                     </Paragraph>
                 </div>
             </Card>

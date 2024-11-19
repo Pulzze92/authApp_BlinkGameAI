@@ -21,35 +21,35 @@ export const Login: React.FC = () => {
             const { remember, ...loginData } = values;
             const result = await dispatch(login(loginData)).unwrap();
             if (result.token) {
-                message.success('Успешная авторизация');
+                message.success('Successfully authorized');
                 navigate('/');
             }
         } catch (e: any) {
-            const errorMessage = e.error || 'Ошибка авторизации';
+            const errorMessage = e.error || 'Authorization error';
             setError(errorMessage);
             message.error(errorMessage);
         }
     };
 
     return (
-        <Card title="Вход в профиль" bordered={false} style={{
+        <Card title="Sign in" bordered={false} style={{
             maxWidth: '400px',
             margin: '100px auto',
             padding: '0 16px'}}>
             <Form onFinish={handleLogin}>
-                <Form.Item<FieldType> name="username" rules={[{required: true, message: 'Введите имя пользователя'}]}>
-                    <Input placeholder="Имя пользователя" />
+                <Form.Item<FieldType> name="username" rules={[{required: true, message: 'Enter username'}]}>
+                    <Input placeholder="Username" />
                 </Form.Item>
-                <Form.Item<FieldType> name="password" rules={[{required: true, message: 'Введите пароль'}]}>
-                    <Input.Password placeholder="Пароль" />
+                <Form.Item<FieldType> name="password" rules={[{required: true, message: 'Enter password'}]}>
+                    <Input.Password placeholder="Password" />
                 </Form.Item>
                 <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
-                    <Checkbox>Запомнить меня</Checkbox>
+                    <Checkbox>Remember me</Checkbox>
                 </Form.Item>
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 <div style={{ textAlign: 'center' }}>
-                    <Button type="primary" htmlType="submit">Войти</Button>
-                    <Button type="link" onClick={() => navigate('/register')}>Зарегистрироваться</Button>
+                    <Button type="primary" htmlType="submit">Sign in</Button>
+                    <Button type="link" onClick={() => navigate('/register')}>Sign up</Button>
                 </div>
 
             </Form>
